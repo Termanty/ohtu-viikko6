@@ -19,28 +19,28 @@ public class IntJoukkoTest {
     @Test
     public void lukujaLisattyMaara() {
         joukko.lisaa(4);
-        assertEquals(3, joukko.mahtavuus());
+        assertEquals(3, joukko.getKoko());
     }
 
     @Test
     public void samaLukuMeneeJoukkoonVaanKerran() {
         joukko.lisaa(10);
         joukko.lisaa(3);
-        assertEquals(2, joukko.mahtavuus());
+        assertEquals(2, joukko.getKoko());
     }
 
     @Test
     public void vainLisatytLuvutLoytyvat() {
-        assertTrue(joukko.kuuluu(10));
-        assertFalse(joukko.kuuluu(5));
-        assertTrue(joukko.kuuluu(3));
+        assertTrue(joukko.kuuluu(10) >= 0);
+        assertFalse(joukko.kuuluu(5) >= 0);
+        assertTrue(joukko.kuuluu(3) >= 0);
     }
 
     @Test
     public void poistettuEiOleEnaaJoukossa() {
         joukko.poista(3);
-        assertFalse(joukko.kuuluu(3));
-        assertEquals(1, joukko.mahtavuus());
+        assertFalse(joukko.kuuluu(3) >= 0);
+        assertEquals(1, joukko.getKoko());
     }
     
     @Test
@@ -63,11 +63,11 @@ public class IntJoukkoTest {
         for (int luku : lisattavat) {
             joukko.lisaa(luku);
         }
-        assertEquals(14, joukko.mahtavuus());
-        assertTrue(joukko.kuuluu(11));
+        assertEquals(14, joukko.getKoko());
+        assertTrue(joukko.kuuluu(11) >=  0);
         joukko.poista(11);
-        assertFalse(joukko.kuuluu(11));
-        assertEquals(13, joukko.mahtavuus());
+        assertFalse(joukko.kuuluu(11) >= 0);
+        assertEquals(13, joukko.getKoko());
     }
     
     @Test
