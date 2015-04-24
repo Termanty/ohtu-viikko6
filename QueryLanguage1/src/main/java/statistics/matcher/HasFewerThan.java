@@ -10,7 +10,7 @@ public class HasFewerThan implements Matcher {
 
     public HasFewerThan(int value, String category) {
         this.value = value;
-        this.fieldName = "get"+category.toUpperCase().charAt(value)+category.substring(1, category.length());
+        this.fieldName = "get"+category.toUpperCase().charAt(0)+category.substring(1, category.length());
     }
 
     @Override

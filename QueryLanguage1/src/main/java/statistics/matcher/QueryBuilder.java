@@ -6,31 +6,36 @@ import java.util.List;
 
 public class QueryBuilder {
     
-    private static List<Matcher> matchers = new ArrayList<Matcher>();
+    private List<Matcher> matchers = new ArrayList<Matcher>();
     
-    public static void playsIn(String team) {
+    public QueryBuilder playsIn(String team) {
         matchers.add(new PlaysIn(team));
+        return this;
     }
     
-    public static void hasAtleast(int value, String category) {
+    public QueryBuilder hasAtLeast(int value, String category) {
         matchers.add(new HasAtLeast(value, category));
+        return this;
     }
     
-    public static void hasFewerThan(int value, String category) {
+    public QueryBuilder hasFewerThan(int value, String category) {
         matchers.add(new HasFewerThan(value, category));
+        return this;
     }
     
-    public static void not(Matcher matcher) {
+    public QueryBuilder not(Matcher matcher) {
         matchers.add(new Not(matcher));
+        return this;
     }
     
-    public static Matcher build() {
-        Matcher m = new And((Matcher[])matchers.toArray());
+    public QueryBuilder oneOf(Matcher... ms) {
+        matchers.add(new Or(ms));
+        return this;
+    }
+    
+    public Matcher build() {
+        Matcher m = new And(matchers.toArray(new Matcher[matchers.size()]));
         matchers.clear();
         return m;
-    }
-    
-    public static Matcher oneOf(Matcher... ms) {
-        return new Or(ms);
     }
 }
