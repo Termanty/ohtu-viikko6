@@ -2,8 +2,8 @@ package ohtu;
 
 public class TennisGame {
     
-    private int m_score1 = 0;
-    private int m_score2 = 0;
+    private int score1 = 0;
+    private int score2 = 0;
     private String player1Name;
     private String player2Name;
 
@@ -14,67 +14,55 @@ public class TennisGame {
 
     public void wonPoint(String playerName) {
         if (playerName == "player1")
-            m_score1 += 1;
+            score1 += 1;
         else
-            m_score2 += 1;
+            score2 += 1;
     }
 
     public String getScore() {
-        String score = "";
-        int tempScore=0;
-        if (m_score1==m_score2)
-        {
-            switch (m_score1)
-            {
-                case 0:
-                        score = "Love-All";
-                    break;
-                case 1:
-                        score = "Fifteen-All";
-                    break;
-                case 2:
-                        score = "Thirty-All";
-                    break;
-                case 3:
-                        score = "Forty-All";
-                    break;
-                default:
-                        score = "Deuce";
-                    break;
-                
-            }
+        if (score1 == score2) {
+            return even();
+        } else if (score1 >= 4 || score2 >= 4) {
+            return atLeastForty();
         }
-        else if (m_score1>=4 || m_score2>=4)
-        {
-            int minusResult = m_score1-m_score2;
-            if (minusResult==1) score ="Advantage player1";
-            else if (minusResult ==-1) score ="Advantage player2";
-            else if (minusResult>=2) score = "Win for player1";
-            else score ="Win for player2";
+        return bothUnderForty();
+    }
+
+    private String even() {
+        if (score1 < 4) {
+            return scoreToString(score1) + "-All";
+        } else {
+            return "Deuce";
         }
-        else
-        {
-            for (int i=1; i<3; i++)
-            {
-                if (i==1) tempScore = m_score1;
-                else { score+="-"; tempScore = m_score2;}
-                switch(tempScore)
-                {
-                    case 0:
-                        score+="Love";
-                        break;
-                    case 1:
-                        score+="Fifteen";
-                        break;
-                    case 2:
-                        score+="Thirty";
-                        break;
-                    case 3:
-                        score+="Forty";
-                        break;
-                }
-            }
+    }
+    
+    private String atLeastForty() {
+        return score1 > score2? leadingPlayer(1) : leadingPlayer(2);
+    }
+    
+    private String leadingPlayer(int player) {
+        if (Math.abs(score1 - score2) == 1) {
+            return "Advantage player" + player;
+        } else {
+            return "Win for player" + player;
         }
-        return score;
+    }
+
+    private String bothUnderForty() {
+        return scoreToString(score1) + "-" + scoreToString(score2);
+    }
+    
+    private String scoreToString(int score) {
+        switch (score) {
+            case 0:
+                return "Love";
+            case 1:
+                return "Fifteen";
+            case 2:
+                return "Thirty";
+            case 3:
+                return "Forty";
+        }
+        return "";
     }
 }
