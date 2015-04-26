@@ -1,6 +1,7 @@
 package com.mycompany.webkauppa;
 
 import com.google.gson.Gson;
+import com.mycompany.webkauppa.ohjaus.Komentotehdas;
 import com.mycompany.webkauppa.sovelluslogiikka.Ostoskori;
 import com.mycompany.webkauppa.ohjaus.OstoksenSuoritus;
 import com.mycompany.webkauppa.sovelluslogiikka.Tuote;
@@ -11,6 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class MaksaOstoksetServlet extends WebKauppaServlet {
+    
+    Komentotehdas komennot;
+
+    public MaksaOstoksetServlet() {
+        komennot = new Komentotehdas();
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -36,12 +43,12 @@ public class MaksaOstoksetServlet extends WebKauppaServlet {
             ostoskori = muodostaOstoskori(request);
         }
 
-        OstoksenSuoritus ostos = new OstoksenSuoritus(nimi, osoite, luottokorttinumero, ostoskori);
-
+        boolean onnistui = komennot.ostoksenSuoritus(nimi, osoite, luottokorttinumero, ostoskori);
+        
         request.setAttribute("osoite", osoite);
         request.setAttribute("hinta", ostoskori.hinta());
 
-        if (ostos.suorita()) {
+        if (onnistui) {
             naytaSivu("/maksu_suoritettu.jsp", request, response);
         } else {
             naytaSivu("/maksu_epaonnistui.jsp", request, response);

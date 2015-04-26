@@ -1,6 +1,7 @@
 
 package com.mycompany.ohmawebkauppa.sovelluslogiikka.ohjaus;
 
+import com.mycompany.webkauppa.ohjaus.Komentotehdas;
 import com.mycompany.webkauppa.ohjaus.OstoksenSuoritus;
 import com.mycompany.webkauppa.sovelluslogiikka.*;
 import com.mycompany.webkauppa.ulkoiset_rajapinnat.*;
@@ -23,7 +24,7 @@ public class OstoksenSuoritusTest {
     String osoite;
     String luottokortti;
 
-    OstoksenSuoritus ostoksenSuoritus;
+    Komentotehdas komennot = new Komentotehdas();
     
     @Before
     public void setUp() {
@@ -43,8 +44,7 @@ public class OstoksenSuoritusTest {
     
     @Test
     public void josMaksuOnnistuuKoriTyhjenee() {
-        ostoksenSuoritus = new OstoksenSuoritus(nimi, osoite, luottokortti, kori);
-        ostoksenSuoritus.suorita();
+        komennot.ostoksenSuoritus(nimi, osoite, luottokortti, kori);
 
         assertEquals(0, kori.ostokset().size());
         assertEquals(0, kori.hinta()); 
@@ -53,25 +53,22 @@ public class OstoksenSuoritusTest {
     
     @Test
     public void josMaksuOnnistuuPankinRajapintaaKaytetty() {
-        ostoksenSuoritus = new OstoksenSuoritus(nimi, osoite, luottokortti, kori);
-        ostoksenSuoritus.suorita();       
+        komennot.ostoksenSuoritus(nimi, osoite, luottokortti, kori);      
     }   
 
     @Test
     public void josMaksuOnnistuuToiRajmituksenapintaaKaytetty() {
-        ostoksenSuoritus = new OstoksenSuoritus(nimi, osoite, luottokortti, kori);
-        ostoksenSuoritus.suorita();       
+        komennot.ostoksenSuoritus(nimi, osoite, luottokortti, kori);       
     }             
 
     // - tyhjä kori, nimi tai osoite -> ei kutsuta pankkia, ei toimitusta
      
     @Test
     public void josPankkiEiHyvaksyMaksuaPalautetaanFalseToimitustaEiTehda() {        
-        ostoksenSuoritus = new OstoksenSuoritus(nimi, osoite, luottokortti, kori);
-        ostoksenSuoritus.setPankki(hylkaavaPankki);
+        boolean onnistui = komennot.ostoksenSuoritus(nimi, osoite, "2", kori);
  
         
-        assertFalse( ostoksenSuoritus.suorita() );
+        assertFalse( onnistui );
         
         // assertSomething
     } 

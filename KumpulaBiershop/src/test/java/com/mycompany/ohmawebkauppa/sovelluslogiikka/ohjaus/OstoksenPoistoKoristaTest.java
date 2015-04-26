@@ -1,5 +1,6 @@
 package com.mycompany.ohmawebkauppa.sovelluslogiikka.ohjaus;
 
+import com.mycompany.webkauppa.ohjaus.Komentotehdas;
 import com.mycompany.webkauppa.ohjaus.OstoksenPoistoKorista;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +12,7 @@ public class OstoksenPoistoKoristaTest {
     Varasto varasto = Varasto.getInstance();
     Ostoskori kori;
     long tuoteid = 1;
-    OstoksenPoistoKorista ostoksenPoisto;
+    Komentotehdas komennot = new Komentotehdas();
 
     @Before
     public void setUp() {
@@ -22,8 +23,7 @@ public class OstoksenPoistoKoristaTest {
 
     @Test
     public void poistettuTuoteEiEnaaKorissa() {
-        ostoksenPoisto = new OstoksenPoistoKorista(kori, tuoteid);
-        ostoksenPoisto.suorita();
+        komennot.ostoksenPoistoKorista(kori, tuoteid);
     
         assertEquals(0, kori.tuotteitaKorissa());
         assertEquals(0, kori.hinta());
@@ -34,8 +34,7 @@ public class OstoksenPoistoKoristaTest {
     public void tuotteenMaaraKasvaa(){
         int varastossaAluksi = varasto.etsiTuote(tuoteid).getSaldo();
         
-        ostoksenPoisto = new OstoksenPoistoKorista(kori, tuoteid);
-        ostoksenPoisto.suorita();
+        komennot.ostoksenPoistoKorista(kori, tuoteid);
     
         assertEquals(varastossaAluksi+1, varasto.etsiTuote(tuoteid).getSaldo());
     }
